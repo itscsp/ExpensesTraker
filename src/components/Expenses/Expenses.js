@@ -1,36 +1,36 @@
-import React, { useState } from "react";
-
-import ExpensesList from "./ExpensesList";
-import ExpensesChart from "./ExpensesChart";
-import Card from "../UI/Cards";
+import React, {useState} from 'react'
+import Card from '../UI/Card';
+import ExpenseItem from "./ExpenseItem";
 import ExpensesFilter from "./ExpensesFilter";
-import "./Expenses.css";
+import './Expenses.css'
 
-const Expenses = (props) => {
-  const [filteredYear, setFilteredYear] = useState("2022");
+function Expenses(props) {
 
-  const filterChangeHandler = (selectedYear) => {
-    setFilteredYear(selectedYear);
-  };
+    const [filteredYear, setFilteredYear] = useState('2020')
 
-  const filteredExpenses = props.items.filter((expense) => {
-    return expense.date.getFullYear().toString() === filteredYear;
-  });
 
- 
-  return (
-    <div>
-      <Card className="expenses">
-        <ExpensesFilter
-          selected={filteredYear}
-          onChangeFilter={filterChangeHandler}
-        />
-        <ExpensesChart expenses={filteredExpenses}/>
-        <ExpensesList items={filteredExpenses} filterYear={filteredYear}/>
-          
-      </Card>
-    </div>
-  );
-};
+    const filterChangeHandler = selectedYear => {
+        setFilteredYear(selectedYear)
+    }
 
-export default Expenses;
+    const filterData =props.items.filter( (item) =>  filteredYear == item.date.getFullYear() );
+
+    let fiterContent = <h1 class="isdata">No data found</h1>
+
+    if(filterData.length > 0) {
+        fiterContent = filterData.map(item => <ExpenseItem key={item.id} title = {item.title} amount={item.amount} date={item.date} /> )
+    }
+
+
+    return (
+        <div>
+            <Card className="expenses">
+                <ExpensesFilter selected={filteredYear} onChangeFilter={filterChangeHandler}/>
+                {fiterContent}
+
+            </Card>
+        </div>
+    )
+}
+
+export default Expenses
